@@ -1,33 +1,56 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const cors = require("cors");
-require("dotenv").config();
-
-const authRoutes = require("./routes/authRoutes");
-const testRoutes = require("./routes/testRoutes");
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors({ origin: "*", credentials: true }));
-app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/auth_demo", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+const transactionsDB = mongoose.createConnection(
+  "mongodb://localhost:27017/transactionsDB",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+const budgetsDB = mongoose.createConnection(
+  "mongodb://localhost:27017/budgetsDB",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+transactionsDB.on("connected", () =>
+  console.log("MongoDB connected to transactionsDB")
+);
+transactionsDB.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+  process.exit(1);
 });
 
-mongoose.connection.on("connected", () =>
-  console.log("✅ Connected to MongoDB")
-);
-mongoose.connection.on("error", (err) =>
-  console.log("❌ MongoDB connection error:", err)
-);
+budgetsDB.on("connected", () => console.log("Connected to budgetsDB"));
+budgetsDB.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+  process.exit(1);
+});
 
-app.use("/api/auth", authRoutes);
-app.use("/api/test", testRoutes);
+const Transaction = require("./models/Transactions")(transactionsDB);
+app.get("/api/transactions", async (req, res) => {
+  try {
+    const transactions = await Transaction.find();
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching transactions", error });
+  }
+});
 
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-);
+const budgetRoutes = require("./routes/budgetRoutes")(budgetsDB);
+app.use("/api/budgets", budgetRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
