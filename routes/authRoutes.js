@@ -1,11 +1,22 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const mongoose = require("mongoose");
+const UserModel = require("../models/User");
 require("dotenv").config();
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "secret123456789";
+
+const authDB = mongoose.createConnection(
+  process.env.MONGO_URI || "mongodb://localhost:27017/authDB",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+const User = UserModel(authDB);
 
 router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
@@ -42,6 +53,10 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+router.get("/api/auth/login", (req, res) => {
+  res.send("Auth API is working! Try POST /signup or POST /login");
 });
 
 module.exports = router;
