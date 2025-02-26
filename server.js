@@ -8,11 +8,9 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Import auth routes
 const authRoutes = require("./routes/authRoutes");
 app.use("/api/auth", authRoutes);
 
-// Connect to TransactionsDB
 const transactionsDB = mongoose.createConnection(
   "mongodb://localhost:27017/transactionsDB",
   {
@@ -28,7 +26,6 @@ transactionsDB.on("error", (err) => {
   process.exit(1);
 });
 
-// Connect to BudgetsDB
 const budgetsDB = mongoose.createConnection(
   "mongodb://localhost:27017/budgetsDB",
   {
@@ -42,10 +39,8 @@ budgetsDB.on("error", (err) => {
   process.exit(1);
 });
 
-// Import Transaction Model
 const Transaction = require("./models/Transactions")(transactionsDB);
 
-// Transactions Route
 app.get("/api/transactions", async (req, res) => {
   try {
     const transactions = await Transaction.find();
@@ -55,11 +50,9 @@ app.get("/api/transactions", async (req, res) => {
   }
 });
 
-// Import Budget Routes (Make sure budgetRoutes.js exports a function)
 const budgetRoutes = require("./routes/budgetRoutes")(budgetsDB);
 app.use("/api/budgets", budgetRoutes);
 
-// Start Server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
