@@ -2,7 +2,6 @@ const Transaction = require("../models/Transactions.js");
 
 const seedTransactions = async () => {
   await Transaction.deleteMany({});
-  console.log("Old transactions deleted");
   await Transaction.insertMany([
     {
       avatar: "emma-richardson.jpg",

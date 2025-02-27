@@ -1,15 +1,7 @@
 const mongoose = require("mongoose");
 
-const budgetsDB = mongoose.createConnection(
-  "mongodb://localhost:27017/budgetsDB",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
-
-const budgetSchema = new mongoose.Schema({
-  id: Number,
+const BudgetSchema = new mongoose.Schema({
+  id: { type: Number, required: true, unique: true },
   amount: Number,
   category: String,
   theme: String,
@@ -17,4 +9,4 @@ const budgetSchema = new mongoose.Schema({
   optional: Boolean,
 });
 
-module.exports = (budgetsDB) => budgetsDB.model("Budget", budgetSchema);
+module.exports = (budgetsDB) => budgetsDB.model("Budget", BudgetSchema);
