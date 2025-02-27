@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Budget = require("../models/Budget.js");
+const createBudgetModel = require("../models/Budget"); // ✅ Correct Import
 
 const budgetData = [
   {
@@ -8,6 +8,7 @@ const budgetData = [
     amount: 50.0,
     theme: "#277C78",
     color: "Green",
+    optional: false,
   },
   {
     id: 2,
@@ -15,6 +16,7 @@ const budgetData = [
     amount: 750.0,
     theme: "#82C9D7",
     color: "Cyan",
+    optional: false,
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ const budgetData = [
     amount: 75.0,
     theme: "#F2CDAC",
     color: "Desert Sand",
+    optional: false,
   },
   {
     id: 5,
@@ -45,6 +48,7 @@ const budgetData = [
     amount: 100.0,
     theme: "#626070",
     color: "Gray",
+    optional: false,
   },
   {
     id: 7,
@@ -58,19 +62,23 @@ const budgetData = [
 
 const seedBudgets = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/budgetsDB", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const budgetsDB = await mongoose.connect(
+      "mongodb://localhost:27017/budgetsDB",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
 
-    // Delete all existing budgets
+    const Budget = createBudgetModel(mongoose.connection); // ✅ Correct model setup
+
     await Budget.deleteMany({});
-    console.log("🗑️ Existing budgets removed");
+    console.log("🗑️ Cleared existing budgets");
 
     await Budget.insertMany(budgetData);
     console.log("✅ New budgets seeded successfully!");
 
-    mongoose.connection.close();
+    await mongoose.connection.close();
     console.log("🔌 MongoDB connection closed");
   } catch (error) {
     console.error("❌ Error seeding budgets:", error);

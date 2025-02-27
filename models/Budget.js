@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const BudgetSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
+  id: { type: Number, required: true },
   amount: Number,
   category: String,
   theme: String,
@@ -9,4 +9,6 @@ const BudgetSchema = new mongoose.Schema({
   optional: Boolean,
 });
 
-module.exports = (budgetsDB) => budgetsDB.model("Budget", BudgetSchema);
+module.exports = (budgetsDB) => {
+  return budgetsDB.model("Budget", BudgetSchema);
+};
