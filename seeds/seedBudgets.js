@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const createBudgetModel = require("../models/Budget"); // ✅ Correct Import
+const createBudgetModel = require("../models/Budget");
 
 const budgetData = [
   {

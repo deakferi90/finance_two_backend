@@ -6,7 +6,7 @@ const BudgetSchema = new mongoose.Schema({
   category: String,
   theme: String,
   color: String,
-  optional: Boolean,
+  optional: { type: Boolean, required: true },
 });
 
 module.exports = (budgetsDB) => {
