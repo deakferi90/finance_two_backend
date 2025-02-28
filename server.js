@@ -75,6 +75,28 @@ app.get("/api/budgets/:id", async (req, res) => {
   }
 });
 
+app.put("/api/budgets/:id", async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    const updatedBudget = await Budget.findOneAndUpdate(
+      { id: Number(id) },
+      { $set: updateData },
+      { new: true }
+    );
+
+    if (!updatedBudget) {
+      return res.status(404).json({ message: "Budget not found" });
+    }
+
+    res.json(updatedBudget);
+  } catch (error) {
+    console.error("❌ Error updating budget:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
