@@ -70,7 +70,7 @@ const seedBudgets = async () => {
       }
     );
 
-    const Budget = createBudgetModel(mongoose.connection); // ✅ Correct model setup
+    const Budget = createBudgetModel(mongoose.connection);
 
     await Budget.deleteMany({});
     console.log("🗑️ Cleared existing budgets");
