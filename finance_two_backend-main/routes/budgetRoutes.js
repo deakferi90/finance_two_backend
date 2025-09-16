@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = (budgetsDB) => {
-  const Budget = require("../models/Budget")(budgetsDB); // ✅ Pass `budgetsDB`
+  const Budget = require("../models/Budget")(budgetsDB);
 
   router.get("/", async (req, res) => {
     try {
@@ -21,11 +21,9 @@ module.exports = (budgetsDB) => {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      // Check if a budget with this ID already exists
       const existingBudget = await Budget.findOne({ id });
 
       if (existingBudget) {
-        // Update existing budget
         existingBudget.category = category;
         existingBudget.amount = amount;
         existingBudget.theme = theme;
@@ -36,7 +34,6 @@ module.exports = (budgetsDB) => {
         console.log("✅ Budget updated:", existingBudget);
         return res.status(200).json(existingBudget);
       } else {
-        // Create a new budget
         const newBudget = new Budget({
           id,
           category,
