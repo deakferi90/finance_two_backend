@@ -32,6 +32,22 @@ const Budget = require("./models/Budget")(budgetsDB);
 const budgetRoutes = require("./routes/budgetRoutes")(budgetsDB);
 app.use("/api/budgets", budgetRoutes);
 
+const potsDB = mongoose.createConnection("mongodb://localhost:27017/potsDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+potsDB.on("connected", () => console.log("✅ MongoDB connected to potsDB"));
+
+potsDB.on("error", (err) => {
+  console.error("❌ MongoDB connection error:", err);
+  process.exit(1);
+});
+
+const Pots = require("./models/Pots")(potsDB);
+const potsRoutes = require("./routes/potsRoutes")(potsDB);
+app.use("/api/pots", potsRoutes);
+
 const transactionsDB = mongoose.createConnection(
   "mongodb://localhost:27017/transactionsDB",
   {
@@ -54,6 +70,15 @@ app.get("/api/transactions", async (req, res) => {
   try {
     const transactions = await Transaction.find();
     res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching transactions", error });
+  }
+});
+
+app.get("/api/pots", async (req, res) => {
+  try {
+    const pots = await Pots.find();
+    res.json(pots);
   } catch (error) {
     res.status(500).json({ message: "Error fetching transactions", error });
   }
