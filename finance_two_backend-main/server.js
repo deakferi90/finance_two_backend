@@ -122,6 +122,44 @@ app.put("/api/budgets/:id", async (req, res) => {
   }
 });
 
+app.get("/api/pots/:id", async (req, res) => {
+  const potId = parseInt(req.params.id);
+  try {
+    const pot = await Pots.findOne({ id: potId });
+
+    if (!pot) {
+      return res.status(404).json({ message: "Pot not found" });
+    }
+
+    res.json(pot);
+  } catch (error) {
+    console.error("Error fetching pot:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.put("/api/pots/:id", async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    const updatedPot = await Pots.findOneAndUpdate(
+      { id: Number(id) },
+      { $set: updateData },
+      { new: true }
+    );
+
+    if (!updatedPot) {
+      return res.status(404).json({ message: "Budget not found" });
+    }
+
+    res.json(updatedPot);
+  } catch (error) {
+    console.error("❌ Error updating budget:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 app.delete("/api/budgets/:id", async (req, res) => {
   const { id } = req.params;
 
