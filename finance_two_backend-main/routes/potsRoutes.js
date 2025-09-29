@@ -16,39 +16,20 @@ module.exports = (potsDB) => {
 
   router.post("/", async (req, res) => {
     try {
-      const { id, name, target, total, theme } = req.body;
+      const { name, target, total, theme } = req.body;
 
-      if (!id || !category || amount == null) {
+      // Simple validation
+      if (!name || target == null || total == null || !theme) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      const existingBudget = await Budget.findOne({ id });
+      const newPot = new Pots({ name, target, total, theme });
+      await newPot.save();
 
-      if (existingBudget) {
-        existingBudget.name = name;
-        existingBudget.target = target;
-        existingBudget.total = total;
-        existingBudget.theme = theme;
-
-        await existingBudget.save();
-        console.log("✅ Budget updated:", existingBudget);
-        return res.status(200).json(existingBudget);
-      } else {
-        const newBudget = new Budget({
-          id,
-          name,
-          target,
-          total,
-          theme,
-        });
-
-        await newBudget.save();
-        console.log("✅ New budget added:", newBudget);
-        return res.status(201).json(newBudget);
-      }
+      res.status(201).json(newPot);
     } catch (error) {
-      console.error("❌ Error adding/updating budget:", error);
-      res.status(500).json({ message: "Failed to add/update budget", error });
+      console.error("❌ Error creating pot:", error);
+      res.status(500).json({ message: "Server error", error });
     }
   });
 

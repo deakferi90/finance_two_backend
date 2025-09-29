@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 const createPotsModel = require("../models/Pots");
 
-// Connect to potsDB
 const potsDB = mongoose.createConnection("mongodb://localhost:27017/potsDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// Sample Pots Data
 const PotsData = [
   {
     id: 1,

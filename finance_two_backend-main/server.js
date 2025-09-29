@@ -139,6 +139,23 @@ app.delete("/api/budgets/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/pots/:id", async (req, res) => {
+  try {
+    const potId = req.params.id;
+
+    const deletedPot = await Pots.findByIdAndDelete(potId);
+
+    if (!deletedPot) {
+      return res.status(404).json({ message: "Pot not found" });
+    }
+
+    res.status(200).json({ message: "Pot deleted successfully", deletedPot });
+  } catch (error) {
+    console.error("Error deleting pot:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
