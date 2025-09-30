@@ -18,7 +18,6 @@ module.exports = (potsDB) => {
     try {
       const { name, target, total, theme } = req.body;
 
-      // Simple validation
       if (!name || target == null || total == null || !theme) {
         return res.status(400).json({ message: "Missing required fields" });
       }

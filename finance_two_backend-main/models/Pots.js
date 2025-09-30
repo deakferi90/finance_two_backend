@@ -1,36 +1,15 @@
 const mongoose = require("mongoose");
 
-const PotsSchema = new mongoose.Schema(
+const PotSchema = new mongoose.Schema(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    target: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    total: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    theme: {
-      type: String,
-      default: "#000000",
-    },
+    name: { type: String, required: true },
+    target: { type: Number, required: true },
+    total: { type: Number, default: 0 },
+    theme: { type: String, required: true },
+    themeColor: { type: String },
+    animatedValue: { type: Number },
   },
-  {
-    collection: "pots", // explicitly set collection name
-    timestamps: true, // adds createdAt & updatedAt
-  }
+  { timestamps: true }
 );
 
-module.exports = (potsDB) => potsDB.model("Pots", PotsSchema);
+module.exports = (db) => db.model("Pot", PotSchema);

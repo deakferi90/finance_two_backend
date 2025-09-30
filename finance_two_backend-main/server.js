@@ -141,39 +141,17 @@ app.get("/api/pots/:id", async (req, res) => {
 app.put("/api/pots/:id", async (req, res) => {
   const { id } = req.params;
   const updateData = req.body;
-
   try {
-    const updatedPot = await Pots.findOneAndUpdate(
-      { id: Number(id) },
-      { $set: updateData },
-      { new: true }
-    );
+    const updatedPot = await Pots.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
 
-    if (!updatedPot) {
-      return res.status(404).json({ message: "Budget not found" });
-    }
+    if (!updatedPot) return res.status(404).json({ message: "Pot not found" });
 
     res.json(updatedPot);
   } catch (error) {
-    console.error("❌ Error updating budget:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-app.delete("/api/budgets/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const deletedBudget = await Budget.findOneAndDelete({ id: Number(id) });
-
-    if (!deletedBudget) {
-      return res.status(404).json({ message: "Budget not found" });
-    }
-
-    res.json({ message: "Budget deleted successfully", deletedBudget });
-  } catch (error) {
-    console.error("❌ Error deleting budget:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("❌ Error updating pot:", error);
+    res.status(500).json({ message: "Server error", error });
   }
 });
 
@@ -191,6 +169,23 @@ app.delete("/api/pots/:id", async (req, res) => {
   } catch (error) {
     console.error("Error deleting pot:", error);
     res.status(500).json({ message: "Server error", error });
+  }
+});
+
+app.delete("/api/budgets/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedBudget = await Budget.findOneAndDelete({ id: Number(id) });
+
+    if (!deletedBudget) {
+      return res.status(404).json({ message: "Budget not found" });
+    }
+
+    res.json({ message: "Budget deleted successfully", deletedBudget });
+  } catch (error) {
+    console.error("❌ Error deleting budget:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
