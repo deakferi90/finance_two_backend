@@ -5,7 +5,7 @@ const PotSchema = new mongoose.Schema(
     name: { type: String, required: true },
     target: { type: Number, required: true },
     total: { type: Number, default: 0 },
-    theme: { type: String, required: true },
+    theme: { type: String, required: false },
     themeColor: { type: String },
     animatedValue: { type: Number },
   },
