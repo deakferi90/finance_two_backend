@@ -64,7 +64,29 @@ transactionsDB.on("error", (err) => {
   process.exit(1);
 });
 
-const Transaction = require("./models/Transactions")(transactionsDB);
+const recurringBillsDB = mongoose.createConnection(
+  "mongodb://localhost:27017/recurringBillsDB",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+const RecurringBills = require("./models/RecurringBills")(recurringBillsDB);
+const recurringBillsRoutes = require("./routes/recurringBillsRoutes")(
+  recurringBillsDB
+);
+
+app.use("/api/recurringBills", recurringBillsRoutes);
+
+recurringBillsDB.on("connected", () =>
+  console.log("✅ MongoDB connected to recurringBillsDB")
+);
+
+recurringBillsDB.on("error", (err) => {
+  console.error("❌ MongoDB connection error:", err);
+  process.exit(1);
+});
 
 app.get("/api/transactions", async (req, res) => {
   try {
