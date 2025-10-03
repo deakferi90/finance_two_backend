@@ -64,6 +64,12 @@ transactionsDB.on("error", (err) => {
   process.exit(1);
 });
 
+const Transaction = require("./models/Transactions")(transactionsDB);
+const transactionsRoutes = require("./routes/transactionRoutes")(
+  transactionsDB
+);
+app.use("/api/transactions", transactionsRoutes);
+
 const recurringBillsDB = mongoose.createConnection(
   "mongodb://localhost:27017/recurringBillsDB",
   {
@@ -100,6 +106,15 @@ app.get("/api/transactions", async (req, res) => {
 app.get("/api/pots", async (req, res) => {
   try {
     const pots = await Pots.find();
+    res.json(pots);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching transactions", error });
+  }
+});
+
+app.get("/api/recurringBills", async (req, res) => {
+  try {
+    const pots = await RecurringBills.find();
     res.json(pots);
   } catch (error) {
     res.status(500).json({ message: "Error fetching transactions", error });
