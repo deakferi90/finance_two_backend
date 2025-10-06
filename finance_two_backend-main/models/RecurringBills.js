@@ -1,3 +1,4 @@
+// models/RecurringBills.js
 const mongoose = require("mongoose");
 
 const RecurringBillsSchema = new mongoose.Schema({
@@ -5,7 +6,7 @@ const RecurringBillsSchema = new mongoose.Schema({
   avatar: String,
   title: String,
   dueDate: String,
-  status: String,
+  status: { type: String, enum: ["ok", "bad", "neutral"] },
   amount: Number,
 });
 

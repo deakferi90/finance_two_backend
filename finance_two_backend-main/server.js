@@ -112,15 +112,6 @@ app.get("/api/pots", async (req, res) => {
   }
 });
 
-app.get("/api/recurringBills", async (req, res) => {
-  try {
-    const pots = await RecurringBills.find();
-    res.json(pots);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching transactions", error });
-  }
-});
-
 app.get("/api/budgets/:id", async (req, res) => {
   const { id } = req.params;
   try {
