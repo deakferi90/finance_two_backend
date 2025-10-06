@@ -3,10 +3,7 @@ const createBillsModel = require("../models/RecurringBills");
 
 const recurringBillsDB = mongoose.createConnection(
   "mongodb://localhost:27017/recurringBillsDB",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
+  { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
 const RecurringBillsData = [
@@ -16,7 +13,7 @@ const RecurringBillsData = [
     title: "Spark Electric Solutions",
     dueDate: "Monthly-2nd",
     status: "ok",
-    amount: 100.0,
+    amount: 100,
   },
   {
     id: 2,
@@ -24,7 +21,7 @@ const RecurringBillsData = [
     title: "Serenity Spa & Wellness",
     dueDate: "Monthly-3rd",
     status: "ok",
-    amount: 30.0,
+    amount: 30,
   },
   {
     id: 3,
@@ -32,7 +29,7 @@ const RecurringBillsData = [
     title: "Elevate Education",
     dueDate: "Monthly-4th",
     status: "ok",
-    amount: 50.0,
+    amount: 50,
   },
   {
     id: 4,
@@ -40,7 +37,7 @@ const RecurringBillsData = [
     title: "Pixel Playground",
     dueDate: "Monthly-11th",
     status: "ok",
-    amount: 10.0,
+    amount: 10,
   },
   {
     id: 5,
@@ -64,7 +61,7 @@ const RecurringBillsData = [
     title: "EcoFuel Energy",
     dueDate: "Monthly-29th",
     status: "neutral",
-    amount: 35.0,
+    amount: 35,
   },
   {
     id: 8,
@@ -72,25 +69,27 @@ const RecurringBillsData = [
     title: "Aqua Flow Utilities",
     dueDate: "Monthly-30th",
     status: "neutral",
-    amount: 100.0,
+    amount: 100,
   },
 ];
 
 recurringBillsDB.once("open", async () => {
-  console.log("✅ Connected to recurringBillsDB for seeding...");
-
   const Bills = createBillsModel(recurringBillsDB);
 
   try {
-    await Bills.deleteMany({});
-    console.log("🗑️ Cleared existing recurringBills collection");
+    await Bills.collection.drop().catch((err) => {
+      if (err.code === 26)
+        console.log("Collection did not exist, skipping drop");
+      else throw err;
+    });
 
-    await Bills.insertMany(RecurringBillsData);
-    console.log("🌱 recurringBills seeded successfully!");
+    await Bills.insertMany(RecurringBillsData, { ordered: true });
+    console.log("Recurring bills seeded successfully!");
+    console.log(RecurringBillsData);
 
     recurringBillsDB.close();
   } catch (error) {
-    console.error("❌ Error seeding recurringBills:", error);
+    console.error("Error seeding recurring bills:", error);
     recurringBillsDB.close();
   }
 });
