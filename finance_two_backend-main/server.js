@@ -226,6 +226,25 @@ app.delete("/api/budgets/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/reccuringBills/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedBills = await RecurringBills.findOneAndDelete({
+      id: Number(id),
+    });
+
+    if (!deletedBudget) {
+      return res.status(404).json({ message: "Budget not found" });
+    }
+
+    res.json({ message: "Budget deleted successfully", deletedBills });
+  } catch (error) {
+    console.error("❌ Error deleting budget:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

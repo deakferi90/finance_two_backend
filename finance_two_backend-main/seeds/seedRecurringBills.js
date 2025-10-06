@@ -15,6 +15,7 @@ const RecurringBillsData = [
     avatar: "Spark",
     title: "Spark Electric Solutions",
     dueDate: "Monthly-2nd",
+    status: "ok",
     amount: 100.0,
   },
   {
@@ -22,6 +23,7 @@ const RecurringBillsData = [
     avatar: "Serenity",
     title: "Serenity Spa & Wellness",
     dueDate: "Monthly-3rd",
+    status: "ok",
     amount: 30.0,
   },
   {
@@ -29,6 +31,7 @@ const RecurringBillsData = [
     avatar: "Elevate",
     title: "Elevate Education",
     dueDate: "Monthly-4th",
+    status: "ok",
     amount: 50.0,
   },
   {
@@ -36,6 +39,7 @@ const RecurringBillsData = [
     avatar: "Pixel",
     title: "Pixel Playground",
     dueDate: "Monthly-11th",
+    status: "ok",
     amount: 10.0,
   },
   {
@@ -43,6 +47,7 @@ const RecurringBillsData = [
     avatar: "Nimbus",
     title: "Nimbus Data Storage",
     dueDate: "Monthly-21st",
+    status: "bad",
     amount: 9.99,
   },
   {
@@ -50,6 +55,7 @@ const RecurringBillsData = [
     avatar: "ByteWise",
     title: "Bytewise",
     dueDate: "Monthly-23rd",
+    status: "bad",
     amount: 49.99,
   },
   {
@@ -57,6 +63,7 @@ const RecurringBillsData = [
     avatar: "EcoFuel",
     title: "EcoFuel Energy",
     dueDate: "Monthly-29th",
+    status: "neutral",
     amount: 35.0,
   },
   {
@@ -64,6 +71,7 @@ const RecurringBillsData = [
     avatar: "AquaFlow",
     title: "Aqua Flow Utilities",
     dueDate: "Monthly-30th",
+    status: "neutral",
     amount: 100.0,
   },
 ];

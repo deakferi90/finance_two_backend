@@ -5,6 +5,7 @@ const RecurringBillsSchema = new mongoose.Schema({
   avatar: String,
   title: String,
   dueDate: String,
+  status: String,
   amount: Number,
 });
 
