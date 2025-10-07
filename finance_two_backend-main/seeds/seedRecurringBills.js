@@ -83,7 +83,7 @@ recurringBillsDB.once("open", async () => {
       else throw err;
     });
 
-    await Bills.insertMany(RecurringBillsData, { ordered: true });
+    await Bills.insertMany(RecurringBillsData);
     console.log("Recurring bills seeded successfully!");
     console.log(RecurringBillsData);
 
